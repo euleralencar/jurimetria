@@ -1,5 +1,6 @@
 # Jurimetria Aplicada
 Curso de Jurimetria com professor José Jesus
+site: https://jurimetria.consudata.com.br/index.html
 
 ## Ementa
 O curso é destinado a acadêmicos de direito e de ciência política, como também profissionais do direito, interessados em aprender como juízes, desembargadores e ministros decidem as causas submetidas a eles. O curso dará uma introdução ao ambiente de programação R e mostrará como baixar, organizar e analisar as decisões do TJSP, do STF e eventualmente dos TRTs. A análise permitirá prever decisões futuras com base em decisões passadas. Para tanto, utilizará de métodos estatísticos, de processamento de linguagem natural e de machine learning, bem como, de análise de sobrevivência. Ao final, os participantes terão a oportunidade de visualizar os resultados em um aplicativo rico em dados e em possibilidades de análise.
