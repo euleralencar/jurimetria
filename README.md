@@ -44,3 +44,4 @@ O curso é destinado a acadêmicos de direito e de ciência política, como tamb
 Aula 01 - https://field-fireman-b25.notion.site/Aula-01-1ebccddb8eac4af3b4a38971f8ba2b39
 
 ## Referências
+* https://jurimetria.consudata.com.br/notes/index.html
