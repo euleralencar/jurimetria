@@ -1,4 +1,4 @@
-require(remotes)
+# require(remotes)
 require(tjsp)
 
 # cjsg -> consulta jurisprudencial

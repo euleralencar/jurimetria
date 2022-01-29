@@ -6,9 +6,11 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning=FALSE)
 require(remotes)
 require(tjsp)
+require(tidyverse)
+require(lubridate)
 ```
 
 ## Preparação
@@ -254,3 +256,157 @@ dispositivo <- tjsp_ler_dispositivo(arquivos)
 # classifica a decisão, conforme texto do dispositivo
 dispositivo$decisao <- tjsp_classificar_writ(dispositivo$dispositivo)
 ```
+
+## Tidyverse
+
+Vamos trabalhar com conceitos do Tidyverse, que é um metapacote que possuí vários pacotes como dplyr, ggplot2, tidyr, entre outros. Vamos trabalhar inicialmente com *dplyr*. Iremos explorar alguns verbos:
+
+* select();
+* filter();
+* group_by();
+* summarise();
+* count();
+* mutate().
+
+```{r eval=TRUE, include=TRUE}
+# Trabalhando com Tidyverse  *********************************
+
+# Vamos trabalhar com a base de cposg
+
+# lista o arquivo agora com cposg
+arquivos <- list.files("../01-data-raw/cposg", full.names = T)
+# transforma numa tabela
+cposg <- ler_dados_cposg(arquivos)
+# baixar partes
+partes <- tjsp_ler_partes(arquivos)
+# baixar movimentacao
+movimentacao <- ler_movimentacao_cposg(arquivos)
+# dispositivo -> decisao
+dispositivo <- tjsp_ler_dispositivo(arquivos)
+# classifica a decisão, conforme texto do dispositivo
+dispositivo$decisao <- tjsp_classificar_writ(dispositivo$dispositivo)
+```
+
+```{r}
+# Vamos verificar a quantidade de movimentações por processo
+movimentacao %>% 
+  count(processo) %>% 
+  arrange(desc(n))
+```
+
+```{r}
+# Podemos usar o group_by para fazer a mesma operação
+movimentacao %>% 
+  group_by(processo) %>% 
+  summarise(n = n()) %>% 
+  arrange(desc(n))
+```
+
+```{r}
+# Vamos criar uma nova variável com ano da movimentação do processo
+movimentacao %>% 
+  mutate(ano_movimento = lubridate::year(data))
+```
+
+```{r}
+# Vamos trabalhar com a base cjsg  *********************************
+# lista os caminhos do arquivo
+arquivos <- list.files("../01-data-raw/cjsg", full.names = T)
+# leitura das decisões e tabela os dados
+cjsg <- tjsp_ler_cjsg(arquivos)
+
+# Separando o processo por seus identificadores
+cjsg <- 
+cjsg %>% 
+  mutate(sequencial = str_sub(processo, 1, 7), 
+         digito = str_sub(processo, 8, 9), 
+         ano_processo = str_sub(processo, 10, 13), 
+         segmento = str_sub(processo, 14), 
+         tribunal = str_sub(processo, 15, 16), 
+         distribuidor = str_sub(processo, 17, 20), .after = processo
+         )
+
+cjsg %>% select(processo, sequencial:distribuidor)
+```
+
+```{r}
+# Verificar se o termo covid aparece na ementa
+cjsg <-
+cjsg %>% 
+  mutate(covid = str_detect(ementa, "(?i)covid"))
+# '(?i)' -> Ignora o case sensitive
+
+# Tabela para verificação do termo covid
+cjsg %>% 
+  count(covid)
+```
+
+
+```{r}
+# Verificar se o termo aparece concedido
+cjsg <-
+cjsg %>% 
+  mutate(concedido = str_detect(ementa, "(?i)conced"))
+
+# Tabela para verificação do termo concedido
+cjsg %>% count(concedido)
+```
+
+
+```{r}
+# Verificar as variáveis que são lógicas
+cjsg %>% 
+  select(classe, where(is.logical)) 
+```
+
+```{r}
+# Vamos transformar todas as colunas logicas em numéricas
+cjsg <-
+cjsg %>% 
+  # select(classe, where(is.logical)) %>% 
+  mutate(across(where(is.logical), as.numeric))
+
+cjsg %>% select(classe, covid, concedido)
+```
+
+```{r}
+# Filter   *********************************
+# Vamos filtrar os processos que possuam o termo covid na ementa
+covid <- 
+  cjsg %>% 
+  filter(covid == 1)
+```
+
+```{r}
+# Vamos filtrar os processos que possuam o termo conced** na ementa
+covid %>% 
+  group_by(concedido) %>% 
+  summarise(n = n())
+```
+
+
+```{r}
+# Vamos filtrar os processos que possuam o termo covid e conced** na ementa
+covid_concedido <- cjsg %>% 
+  filter(covid == 1, concedido == 1)
+
+```
+
+
+## Material sobre Análise
+
+### Curso do ZedStatistics
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/v1QqpG0rR1k" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen data-external="1"></iframe>
+
+Outros curso podem ser acessados [aqui](http://www.zstatistics.com/videos).
+
+### Curso da Econometrics Academy
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/fTX8GghbBPc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen data-external="1"></iframe>
+
+Todo curso pode ser acessado [aqui](https://sites.google.com/site/econometricsacademy/econometrics-models/survival-analysis).
+
+### VII Seminário Internacional sobre Análise de Dados na Administração Pública
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/1E8XQG6crtg?start=1630" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen data-external="1"></iframe>
