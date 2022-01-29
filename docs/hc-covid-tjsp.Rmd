@@ -11,6 +11,15 @@ require(remotes)
 require(tjsp)
 ```
 
+## Preparação
+
+Primeiramente instalar o R ([https://cran-r.c3sl.ufpr.br/](https://cran-r.c3sl.ufpr.br/)) e depois instalar o R-Studio ([https://www.rstudio.com/products/rstudio/download/](https://www.rstudio.com/products/rstudio/download/)). Baixe a versão Free do R-Studio que já é suficiente para as análises.
+
+**Algumas referências**
+
+- [https://www.ibpad.com.br/blog/analise-de-dados/aprenda-instalar-o-r-e-o-r-studio/](https://www.ibpad.com.br/blog/analise-de-dados/aprenda-instalar-o-r-e-o-r-studio/)
+- [https://didatica.tech/como-instalar-a-linguagem-r-e-o-rstudio/](https://didatica.tech/como-instalar-a-linguagem-r-e-o-rstudio/)
+
 ## Introdução
 
 Este projeto buscará verificar a hipótese de que o risco de contaminação por COVID-19 seja um argumento válido para a concessão de Habeas Corpus no Tribnunal de Justiça de São Paulo. Para tanto, a pesquisa levantou todas as decisões de segunda instância em HC do TJSP com a palavra "COVID".
