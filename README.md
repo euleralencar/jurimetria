@@ -42,7 +42,7 @@ O curso é destinado a acadêmicos de direito e de ciência política, como tamb
     * Disponibilização do aplicativo
 
 ## Anotações de aula
-Aula 01 - https://field-fireman-b25.notion.site/Aula-01-1ebccddb8eac4af3b4a38971f8ba2b39
+https://euleralencar.github.io/jurimetria/docs/hc-covid-tjsp
 
 ## Referências
 * https://jurimetria.consudata.com.br/notes/index.html
